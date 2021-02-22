@@ -1,0 +1,20 @@
+@use '../themes/selected-theme' as theme;
+@import '~@angular/material/theming';
+
+$-colors: map-get(theme.$theme , color);
+
+$primary-dark: mat-color(map-get($-colors, primary), 800);
+$primary: mat-color(map-get($-colors, primary), 600);
+$primary-light: mat-color(map-get($-colors, primary), 400);
+
+$accent-dark: mat-color(map-get($-colors, accent), 800);
+$accent: mat-color(map-get($-colors, accent), 600);
+$accent-light: mat-color(map-get($-colors, accent), 400);
+
+$warn-dark: mat-color(map-get($-colors, warn), 800);
+$warn: mat-color(map-get($-colors, warn), 600);
+$warn-light: mat-color(map-get($-colors, warn), 400);
+
+$background: map-get(map-get($-colors, background), background);
+$background-text: map-get(map-get($-colors, foreground), text);
+$background-second-text: map-get(map-get($-colors, foreground), secondary-text);

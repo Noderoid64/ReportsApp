@@ -1,0 +1,14 @@
+@import '~@angular/material/theming';
+
+$-client-primary: mat-palette($mat-blue, 300);
+$-client-accent: mat-palette($mat-yellow);
+$-client-warn: mat-palette($mat-red);
+
+$theme: mat-dark-theme((
+  color: (
+    primary: $-client-primary,
+    accent: $-client-accent,
+    warn: $-client-warn,
+  )
+));
+
