@@ -5,6 +5,7 @@ import { ReportPageComponent } from './pages/report-page/report-page.component';
 import { ReportsRoutingModule } from './reports-routing.module';
 import { SharedModule } from 'src/app/shared/shared.module';
 import { TaskTableComponent } from './pages/task-page/task-table/task-table.component';
+import { TaskAddDialogComponent } from './pages/task-page/task-add-dialog/task-add-dialog.component';
 
 
 
@@ -12,7 +13,8 @@ import { TaskTableComponent } from './pages/task-page/task-table/task-table.comp
   declarations: [
     TaskPageComponent,
     ReportPageComponent,
-    TaskTableComponent
+    TaskTableComponent,
+    TaskAddDialogComponent
   ],
   imports: [
     CommonModule,

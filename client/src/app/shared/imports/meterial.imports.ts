@@ -8,6 +8,7 @@ import { MatTabsModule } from '@angular/material/tabs';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatIconModule } from '@angular/material/icon';
 import { MatDividerModule } from '@angular/material/divider';
+import { MatDialogModule } from '@angular/material/dialog';
 
 export const materialModules = [
     MatCardModule,
@@ -19,5 +20,6 @@ export const materialModules = [
     MatTabsModule,
     MatSnackBarModule,
     MatIconModule,
-    MatDividerModule
+    MatDividerModule,
+    MatDialogModule
 ];

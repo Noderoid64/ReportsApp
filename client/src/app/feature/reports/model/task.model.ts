@@ -1,7 +1,7 @@
 export interface Task {
-    id: number,
-    taskTumber: string,
+    id?: number,
+    taskTumber?: string,
     date: Date,
     status: string,
-    comment: string
+    comment?: string
 }

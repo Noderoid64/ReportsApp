@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { materialModules } from './imports/meterial.imports';
+import { ReactiveFormsModule } from '@angular/forms';
 
 
 @NgModule({
@@ -8,9 +9,11 @@ import { materialModules } from './imports/meterial.imports';
   ],
   imports: [
     CommonModule,
+    ReactiveFormsModule,
     ...materialModules
   ],
   exports: [
+    ReactiveFormsModule,
     ...materialModules
   ]
 })

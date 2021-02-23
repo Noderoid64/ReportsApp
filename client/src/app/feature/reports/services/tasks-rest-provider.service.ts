@@ -17,4 +17,12 @@ export class TasksRestProviderService {
         );
     }
 
+    public addTask(task: Task): Observable<any> {
+        return this.httpClient.put<Observable<any>>(
+            environment.serverUrl +
+            'tasks/add',
+            task
+        );
+    }
+
 }

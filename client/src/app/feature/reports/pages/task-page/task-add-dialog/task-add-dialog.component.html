@@ -1,0 +1,24 @@
+<div class="task-add-dialog">
+    <span class="mat-title">New Task</span>
+    <mat-dialog-content class="task-add-dialog-content">
+        <form [formGroup]="newTaskForm">
+            <mat-form-field class="task-info-input">
+                <mat-label>Status</mat-label>
+                <mat-select formControlName="status">
+                    <mat-option value="new">New</mat-option>
+                    <mat-option value="inProgress">InProgress </mat-option>
+                    <mat-option value="done">Done</mat-option>
+                </mat-select>
+            </mat-form-field>
+            <mat-form-field class="task-info-input">
+                <mat-label>Comment</mat-label>
+                <textarea matInput formControlName="comment"></textarea>
+            </mat-form-field>
+        </form>
+    </mat-dialog-content>
+    <mat-dialog-actions align="end">
+        <button mat-button mat-dialog-close>Cancel</button>
+        <button [disabled]="!canAddBePressed" mat-flat-button color="primary" [mat-dialog-close]="getTask()"
+            cdkFocusInitial>Add</button>
+    </mat-dialog-actions>
+</div>

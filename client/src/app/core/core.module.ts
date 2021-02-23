@@ -18,7 +18,6 @@ import { HttpClientModule } from '@angular/common/http';
     HttpClientModule,
     CoreRoutingModule,
     BrowserAnimationsModule,
-    ReactiveFormsModule,
     SharedModule
   ],
   providers: [],
