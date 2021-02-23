@@ -36,7 +36,9 @@ namespace Application
                     builder.AllowAnyOrigin();
                 });
             });
+            services.AddApplicationServices();
             services.ConfigureDAL(Configuration);
+            services.ConfigureDomain();
             services.AddScoped<IJwtTokenGenerator, JwtTokenGenerator>();
             services.AddJwtAuth();
             services.AddControllers();

@@ -2,32 +2,43 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Application.Dtos;
+using Application.Services.Mappers;
 using DAL.Repositories;
+using Domain.Entities;
+using Domain.Services;
 using Microsoft.AspNetCore.Mvc;
-using Task = Domain.Entities.Task;
 
 namespace Application.Controllers
 {
     [ApiController]
-    [Route("api/[controller]")]
+    [Route("api/tasks")]
     public class TaskController: Controller
     {
         private ITaskRepository _taskRepository;
+        private ITaskService _taskService;
+        private IMapper<TaskDto, TaskEntity> _taskMapper;
 
-        public TaskController(ITaskRepository takRepository)
+        public TaskController(
+            ITaskRepository taskRepository, 
+            ITaskService taskService, 
+            IMapper<TaskDto, TaskEntity> taskMapper
+            )
         {
-            _taskRepository = takRepository;
+            _taskRepository = taskRepository;
+            _taskService = taskService;
+            _taskMapper = taskMapper;
         }
         
         [HttpGet]
-        public async Task<ActionResult<Task>> GetTasksAsync(int skip, int take, string? taskNumber)
+        public async Task<ActionResult<ICollection<TaskEntity>>> GetTasksAsync(int skip, int take, string? taskNumber)
         {
-            ActionResult<Task> result;
+            ActionResult<ICollection<TaskEntity>> result;
             try
             {
-                ICollection<Task> tasks = !string.IsNullOrEmpty(taskNumber)
-                    ? await _taskRepository.getTasksByFilterAsync(skip, take, taskNumber)
-                    : await _taskRepository.getTasksAsync(skip, take);
+                ICollection<TaskEntity> tasks = !string.IsNullOrEmpty(taskNumber)
+                    ? await _taskRepository.GetTasksByFilterAsync(skip, take, taskNumber)
+                    : await _taskRepository.GetTasksAsync(skip, take);
 
                 result = Ok(tasks);
             }
@@ -36,6 +47,25 @@ namespace Application.Controllers
                 result = Problem(e.Message);
             }
 
+            return result;
+        }
+
+        [HttpPut("add")]
+        public async Task<IActionResult> AddTask(TaskDto taskDto)
+        {
+            IActionResult result;
+            try
+            {
+                TaskEntity taskEntity = _taskMapper.Map(taskDto);
+                _taskService.AddNewTask(taskEntity);
+                await _taskRepository.SaveAsync();
+                result = Ok();
+            }
+            catch (Exception e)
+            {
+                result = Problem(e.Message);
+            }
+            
             return result;
         }
     }

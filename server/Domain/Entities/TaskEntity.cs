@@ -3,7 +3,7 @@ using Domain.Entities.Enums;
 
 namespace Domain.Entities
 {
-    public class Task
+    public class TaskEntity
     {
         public long Id { get; set; }
         public string TaskNumber { get; set; }
