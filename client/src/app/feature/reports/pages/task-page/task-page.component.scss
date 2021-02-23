@@ -1,0 +1,19 @@
+@use 'variables/intervals' as intervals;
+
+.task-page {
+    display: flex;
+    justify-content: center;
+    .task-form {
+        width: 100%;
+        max-width: 1024px;
+        margin: intervals.$padding-big;
+        .task-actions {
+            display: flex;
+            justify-content: center;
+            padding-top: intervals.$padding-big;
+            .task-add-button {
+                min-width: 100px;
+            }
+        }
+    }
+}
