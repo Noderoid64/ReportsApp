@@ -36,6 +36,7 @@ namespace Application
                     builder.AllowAnyOrigin();
                 });
             });
+            services.ConfigureDAL(Configuration);
             services.AddScoped<IJwtTokenGenerator, JwtTokenGenerator>();
             services.AddJwtAuth();
             services.AddControllers();
