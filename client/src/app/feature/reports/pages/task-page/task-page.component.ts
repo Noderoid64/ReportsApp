@@ -27,7 +27,7 @@ export class TaskPageComponent implements OnInit {
 
   public applyFilter(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value;
-    console.log(filterValue);
+    this.tasks$ = this.taskProvider.getTasks(15, 0, filterValue);
   }
 
   public openDialog() {
