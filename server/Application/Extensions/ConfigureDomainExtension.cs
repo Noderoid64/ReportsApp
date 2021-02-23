@@ -1,4 +1,5 @@
-﻿using DAL.Repositories;
+﻿using Application.Services;
+using DAL.Repositories;
 using Domain.Ports;
 using Domain.Services;
 using Microsoft.Extensions.DependencyInjection;
@@ -11,6 +12,7 @@ namespace Application.Extensions
         {
             services.AddScoped<ITaskService, TaskService>();
             services.AddScoped<ITaskProvider, TaskRepository>();
+            services.AddSingleton<ITaskNumberGenerator, TaskNumberGenerator>();
         }
     }
 }

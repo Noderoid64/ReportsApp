@@ -7,7 +7,7 @@
                 <input matInput (keyup)="applyFilter($event)" placeholder="Ex. ium" #input>
             </mat-form-field>
         </div>
-        <app-task-table></app-task-table>
+        <app-task-table [tasks]="tasks$ | async"></app-task-table>
         <div class="task-actions">
             <button mat-flat-button color="primary" class="task-add-button" (click)="openDialog()">
                 Add

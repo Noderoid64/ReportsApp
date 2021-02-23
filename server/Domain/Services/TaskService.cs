@@ -9,37 +9,24 @@ namespace Domain.Services
     public class TaskService: ITaskService
     {
         private ITaskProvider _taskProvider;
+        private ITaskNumberGenerator _taskNumberGenerator;
 
-        public TaskService(ITaskProvider taskProvider)
+        public TaskService(
+            ITaskProvider taskProvider,
+            ITaskNumberGenerator taskNumberGenerator
+            )
         {
             _taskProvider = taskProvider;
+            _taskNumberGenerator = taskNumberGenerator;
         }
 
         public void AddNewTask(TaskEntity task)
         {
             Assert.IsNotNull(task, "Task should not be null");
 
-            task.TaskNumber = CalculateTaskNumber();
+            task.TaskNumber = _taskNumberGenerator.CalculateTaskNumber();
             _taskProvider.AddTask(task);
         }
 
-        #region TaskNumberCalculation
-        
-        // TODO: move to separate service
-        private DateTime _currentDate = DateTime.Today;
-        private int _counter = 0;
-        
-        private string CalculateTaskNumber()
-        {
-            if (!_currentDate.Equals(DateTime.Today))
-            {
-                _currentDate = DateTime.Today;
-                _counter = 0;
-            }
-            return $"{_currentDate.ToShortDateString()}-{_counter++}";
-        }
-
-        #endregion
-        
     }
 }

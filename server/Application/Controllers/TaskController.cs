@@ -17,12 +17,12 @@ namespace Application.Controllers
     {
         private ITaskRepository _taskRepository;
         private ITaskService _taskService;
-        private IMapper<TaskDto, TaskEntity> _taskMapper;
+        private IBiCollectionMapper<TaskDto, TaskEntity> _taskMapper;
 
         public TaskController(
             ITaskRepository taskRepository, 
             ITaskService taskService, 
-            IMapper<TaskDto, TaskEntity> taskMapper
+            IBiCollectionMapper<TaskDto, TaskEntity> taskMapper
             )
         {
             _taskRepository = taskRepository;
@@ -39,8 +39,8 @@ namespace Application.Controllers
                 ICollection<TaskEntity> tasks = !string.IsNullOrEmpty(taskNumber)
                     ? await _taskRepository.GetTasksByFilterAsync(skip, take, taskNumber)
                     : await _taskRepository.GetTasksAsync(skip, take);
-
-                result = Ok(tasks);
+                ICollection<TaskDto> taskDtos = _taskMapper.MapBack(tasks);
+                result = Ok(taskDtos);
             }
             catch (Exception e)
             {

@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { Observable, of } from 'rxjs';
+import { Task } from '../../model/task.model';
 import { TasksRestProviderService } from '../../services/tasks-rest-provider.service';
 import { TaskAddDialogComponent } from './task-add-dialog/task-add-dialog.component';
 
@@ -11,13 +13,16 @@ import { TaskAddDialogComponent } from './task-add-dialog/task-add-dialog.compon
 })
 export class TaskPageComponent implements OnInit {
 
+  public tasks$: Observable<Task[]> = of();
+
   constructor(
     public dialog: MatDialog,
     public snackBar: MatSnackBar,
     private taskProvider: TasksRestProviderService
   ) { }
 
-  ngOnInit(): void {
+  public ngOnInit(): void {
+    this.tasks$ = this.taskProvider.getTasks(15, 0, undefined);
   }
 
   public applyFilter(event: Event) {
@@ -30,7 +35,7 @@ export class TaskPageComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe(taskToCreate => {
       this.taskProvider.addTask(taskToCreate).subscribe(() => {
-
+        this.tasks$ = this.taskProvider.getTasks(15, 0, undefined);
       }, error => {
         console.error(error);
       });

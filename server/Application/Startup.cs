@@ -34,6 +34,8 @@ namespace Application
                 options.AddDefaultPolicy(builder =>
                 {
                     builder.AllowAnyOrigin();
+                    builder.AllowAnyMethod();
+                    builder.AllowAnyHeader();
                 });
             });
             services.AddApplicationServices();

@@ -9,18 +9,10 @@ import { Task } from '../../../model/task.model';
 })
 export class TaskTableComponent implements OnInit {
 
-  @Input() public tasks: Array<Task> = [
-    {
-      id: 1,
-      comment: 'Some comment',
-      date: new Date(),
-      status: 'Inprogress',
-      taskTumber: '20201010-0001'
-    } as Task
-  ];
+  @Input() public tasks: Array<Task> = [];
 
   public dataSource = new MatTableDataSource(this.tasks);
-  displayedColumns: string[] = ['id', 'taskTumber', 'date', 'status', 'comment'];
+  displayedColumns: string[] = ['id', 'taskNumber', 'date', 'status', 'comment'];
 
   constructor() { }
 

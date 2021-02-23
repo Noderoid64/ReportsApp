@@ -8,12 +8,12 @@ import { environment } from 'src/environments/environment';
 export class TasksRestProviderService {
     constructor(private httpClient: HttpClient) { }
 
-    public getTasks(take: number, skip: number, taskNumber: string): Observable<Task[]> {
+    public getTasks(take: number, skip: number, taskNumber: string | undefined): Observable<Task[]> {
         return this.httpClient.get<Task[]>(
             environment.serverUrl +
             'tasks?take=' + take +
-            '&skip=' + skip +
-            '&taskNumber='
+            '&skip=' + skip + (taskNumber ?
+                '&taskNumber=' + taskNumber : '')
         );
     }
 

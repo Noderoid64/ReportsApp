@@ -9,7 +9,7 @@ namespace Application.Extensions
     {
         public static void AddApplicationServices(this IServiceCollection services)
         {
-            services.AddScoped <IMapper<TaskDto, TaskEntity>, TaskMapperService>();
+            services.AddScoped <IBiCollectionMapper<TaskDto, TaskEntity>, TaskMapperService>();
         }
     }
 }
