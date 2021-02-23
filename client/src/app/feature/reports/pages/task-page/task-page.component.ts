@@ -1,7 +1,9 @@
 import { Component, OnInit } from '@angular/core';
+import { FormControl } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { Observable, of } from 'rxjs';
+import { Observable, of, Subscription } from 'rxjs';
+import { debounceTime } from 'rxjs/operators';
 import { Task } from '../../model/task.model';
 import { TasksRestProviderService } from '../../services/tasks-rest-provider.service';
 import { TaskAddDialogComponent } from './task-add-dialog/task-add-dialog.component';
@@ -13,7 +15,13 @@ import { TaskAddDialogComponent } from './task-add-dialog/task-add-dialog.compon
 })
 export class TaskPageComponent implements OnInit {
 
+  public readonly pageSize = 10;
   public tasks$: Observable<Task[]> = of();
+  public taskCount$: Observable<number> = of(0);
+  public currentPage = 0;
+  public filterControl = new FormControl();
+
+  private subscriptions: Subscription;
 
   constructor(
     public dialog: MatDialog,
@@ -22,24 +30,31 @@ export class TaskPageComponent implements OnInit {
   ) { }
 
   public ngOnInit(): void {
-    this.tasks$ = this.taskProvider.getTasks(15, 0, undefined);
+    this.updateTasks();
+    this.subscriptions = this.filterControl.valueChanges.pipe(debounceTime(500)).subscribe(this.updateTasks.bind(this));
   }
 
-  public applyFilter(event: Event) {
-    const filterValue = (event.target as HTMLInputElement).value;
-    this.tasks$ = this.taskProvider.getTasks(15, 0, filterValue);
-  }
-
-  public openDialog() {
+  public openDialog(): void {
     const dialogRef = this.dialog.open(TaskAddDialogComponent);
 
-    dialogRef.afterClosed().subscribe(taskToCreate => {
+    dialogRef.afterClosed().toPromise().then(taskToCreate => {
       this.taskProvider.addTask(taskToCreate).subscribe(() => {
-        this.tasks$ = this.taskProvider.getTasks(15, 0, undefined);
+        this.updateTasks();
       }, error => {
         console.error(error);
       });
     });
+  }
+
+  public onPageChanged(page: number): void {
+    console.log(page);
+    this.currentPage = page;
+    this.updateTasks();
+  }
+
+  private updateTasks(): void {
+    this.tasks$ = this.taskProvider.getTasks(this.pageSize, this.pageSize * this.currentPage, this.filterControl.value);
+    this.taskCount$ = this.taskProvider.getTaskCount();
   }
 
 

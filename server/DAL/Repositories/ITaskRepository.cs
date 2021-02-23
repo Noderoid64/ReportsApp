@@ -8,6 +8,7 @@ namespace DAL.Repositories
     {
         Task<ICollection<TaskEntity>> GetTasksAsync(int skip, int take);
         Task<ICollection<TaskEntity>> GetTasksByFilterAsync(int skip, int take, string taskNumber);
+        Task<long> GetTaskCount();
         void AddTask(TaskEntity task);
         Task SaveAsync();
     }

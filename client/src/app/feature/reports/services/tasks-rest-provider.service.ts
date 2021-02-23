@@ -8,12 +8,21 @@ import { environment } from 'src/environments/environment';
 export class TasksRestProviderService {
     constructor(private httpClient: HttpClient) { }
 
+    // TODO merge 'getTasks' and 'getTaskCount' into sigle request
+
     public getTasks(take: number, skip: number, taskNumber: string | undefined): Observable<Task[]> {
         return this.httpClient.get<Task[]>(
             environment.serverUrl +
             'tasks?take=' + take +
             '&skip=' + skip + (taskNumber ?
                 '&taskNumber=' + taskNumber : '')
+        );
+    }
+
+    public getTaskCount(): Observable<number> {
+        return this.httpClient.get<number>(
+            environment.serverUrl +
+            'tasks/count'
         );
     }
 

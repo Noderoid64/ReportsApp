@@ -36,6 +36,11 @@ namespace DAL.Repositories
             return await query.ToListAsync();
         }
 
+        public async Task<long> GetTaskCount()
+        {
+            return await _context.Tasks.CountAsync();
+        }
+
         public void AddTask(TaskEntity task)
         {
             _context.Tasks.Add(task);

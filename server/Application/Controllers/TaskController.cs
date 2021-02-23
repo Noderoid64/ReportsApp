@@ -68,5 +68,22 @@ namespace Application.Controllers
             
             return result;
         }
+
+        [HttpGet("count")]
+        public async Task<ActionResult<long>> GetTaskCount()
+        {
+            ActionResult<long> result;
+            try
+            {
+                long taskCount = await _taskRepository.GetTaskCount();
+                result = Ok(taskCount);
+            }
+            catch (Exception e)
+            {
+                result = Problem(e.Message);
+            }
+            
+            return result;
+        }
     }
 }

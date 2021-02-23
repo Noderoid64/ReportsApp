@@ -4,10 +4,12 @@
         <div class="task-filter">
             <mat-form-field>
                 <mat-label>Filter</mat-label>
-                <input matInput (keyup)="applyFilter($event)" placeholder="Ex. ium" #input>
+                <input matInput [formControl]="filterControl" placeholder="Ex. 20211201" #input>
             </mat-form-field>
         </div>
-        <app-task-table [tasks]="tasks$ | async"></app-task-table>
+        <app-task-table [tasks]="tasks$ | async" [pageSize]="pageSize" [allItems]="taskCount$ | async"
+            (pageChanged)="onPageChanged($event)">
+        </app-task-table>
         <div class="task-actions">
             <button mat-flat-button color="primary" class="task-add-button" (click)="openDialog()">
                 Add
