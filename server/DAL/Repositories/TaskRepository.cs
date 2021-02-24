@@ -33,7 +33,7 @@ namespace DAL.Repositories
             var query = _context.Tasks
                 .Where(t => 
                     t.UserId.Equals(userId) && 
-                    t.TaskNumber.StartsWith(taskNumber)
+                    t.TaskNumber.Contains(taskNumber)
                     )
                 .OrderBy(t => t.TaskNumber)
                 .Skip(skip)

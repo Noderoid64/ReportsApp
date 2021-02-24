@@ -6,6 +6,8 @@ namespace Application.Services
 {
     public class TaskNumberGenerator: ITaskNumberGenerator
     {
+        // TODO: the logic should be based on persisted data
+        // to avoid same task numbers after server rebooting
         private DateTime _currentDate = DateTime.Today;
         private int _counter = 0;
         private Mutex _mutex = new Mutex();
