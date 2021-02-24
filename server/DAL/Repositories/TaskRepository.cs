@@ -17,33 +17,27 @@ namespace DAL.Repositories
             _context = context ?? throw new ArgumentNullException(nameof(context));
         }
 
-        public async Task<ICollection<TaskEntity>> GetTasksAsync(int skip, int take, long userId)
+        public async Task<ICollection<TaskEntity>> GetTasksAsync(int skip, int take, long userId, string? taskNumber)
         {
             var query = _context.Tasks
-                .Where(t => t.UserId.Equals(userId))
+                .Where(t => t.UserId.Equals(userId));
+
+            query = tryAddTaskNumberFilter(query, taskNumber);
+            
+            query = query
                 .OrderBy(t => t.TaskNumber)
                 .Skip(skip)
                 .Take(take);
+            
             return await query.ToListAsync();
         }
 
-        public async Task<ICollection<TaskEntity>> GetTasksByFilterAsync(int skip, int take, string taskNumber, long userId)
+        public async Task<long> GetTaskCount(long userId, string? taskNumber)
         {
-            // TODO move skip-take logic to separate method
-            var query = _context.Tasks
-                .Where(t => 
-                    t.UserId.Equals(userId) && 
-                    t.TaskNumber.Contains(taskNumber)
-                    )
-                .OrderBy(t => t.TaskNumber)
-                .Skip(skip)
-                .Take(take);
-            return await query.ToListAsync();
-        }
+            var query = _context.Tasks.Where(t => t.UserId.Equals(userId));
+            query = tryAddTaskNumberFilter(query, taskNumber);
 
-        public async Task<long> GetTaskCount(long userId)
-        {
-            return await _context.Tasks.Where(t => t.UserId.Equals(userId)).CountAsync();
+            return await query.CountAsync();
         }
 
         public void AddTask(TaskEntity task)
@@ -54,6 +48,16 @@ namespace DAL.Repositories
         public async Task SaveAsync()
         {
             await _context.SaveChangesAsync();
+        }
+
+        private IQueryable<TaskEntity> tryAddTaskNumberFilter(IQueryable<TaskEntity> query, string? taskNumber)
+        {
+            if (taskNumber != null)
+            {
+                query = query.Where(t => t.TaskNumber.Contains(taskNumber));
+            }
+
+            return query;
         }
     }
 }

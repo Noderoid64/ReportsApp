@@ -3,7 +3,8 @@ import { FormControl } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Observable, of, Subscription } from 'rxjs';
-import { debounceTime } from 'rxjs/operators';
+import { debounceTime, map } from 'rxjs/operators';
+import { TaskCountDto } from '../../model/task-count.dto';
 import { Task } from '../../model/task.model';
 import { TasksRestProviderService } from '../../services/tasks-rest-provider.service';
 import { TaskAddDialogComponent } from './task-add-dialog/task-add-dialog.component';
@@ -53,8 +54,9 @@ export class TaskPageComponent implements OnInit {
   }
 
   private updateTasks(): void {
-    this.tasks$ = this.taskProvider.getTasks(this.pageSize, this.pageSize * this.currentPage, this.filterControl.value);
-    this.taskCount$ = this.taskProvider.getTaskCount();
+    const tasks$ = this.taskProvider.getTasks(this.pageSize, this.pageSize * this.currentPage, this.filterControl.value);
+    this.tasks$ = tasks$.pipe(map((val: TaskCountDto) => val.tasks));
+    this.taskCount$ = tasks$.pipe(map((val: TaskCountDto) => val.taskCount));
   }
 
 

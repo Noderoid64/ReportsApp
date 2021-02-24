@@ -6,9 +6,8 @@ namespace DAL.Repositories
 {
     public interface ITaskRepository
     {
-        Task<ICollection<TaskEntity>> GetTasksAsync(int skip, int take, long userId);
-        Task<ICollection<TaskEntity>> GetTasksByFilterAsync(int skip, int take, string taskNumber, long userId);
-        Task<long> GetTaskCount(long userId);
+        Task<ICollection<TaskEntity>> GetTasksAsync(int skip, int take, long userId, string? taskNumber);
+        Task<long> GetTaskCount(long userId, string? taskNumber);
         void AddTask(TaskEntity task);
         Task SaveAsync();
     }

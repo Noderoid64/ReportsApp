@@ -3,6 +3,8 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Task } from '../model/task.model';
 import { environment } from 'src/environments/environment';
+import { share } from 'rxjs/operators';
+import { TaskCountDto } from '../model/task-count.dto';
 
 @Injectable({ providedIn: 'root' })
 export class TasksRestProviderService {
@@ -12,23 +14,13 @@ export class TasksRestProviderService {
 
     // TODO merge 'getTasks' and 'getTaskCount' into sigle request
 
-    public getTasks(take: number, skip: number, taskNumber: string | undefined): Observable<Task[]> {
-        return this.httpClient.get<Task[]>(
+    public getTasks(take: number, skip: number, taskNumber: string | undefined): Observable<TaskCountDto> {
+        return this.httpClient.get<TaskCountDto>(
             environment.serverUrl +
             'tasks?take=' + take +
             '&skip=' + skip + (taskNumber ?
-                '&taskNumber=' + taskNumber : ''),
-            {
-
-            }
-        );
-    }
-
-    public getTaskCount(): Observable<number> {
-        return this.httpClient.get<number>(
-            environment.serverUrl +
-            'tasks/count'
-        );
+                '&taskNumber=' + taskNumber : '')
+        ).pipe(share());
     }
 
     public addTask(task: Task): Observable<any> {

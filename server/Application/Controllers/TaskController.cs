@@ -41,11 +41,16 @@ namespace Application.Controllers
             try
             {
                 long userId = GetUserIdFromClaims();
-                ICollection<TaskEntity> tasks = !string.IsNullOrEmpty(taskNumber)
-                    ? await _taskRepository.GetTasksByFilterAsync(skip, take, taskNumber, userId)
-                    : await _taskRepository.GetTasksAsync(skip, take, userId);
+                
+                ICollection<TaskEntity> tasks = await _taskRepository.GetTasksAsync(skip, take, userId, taskNumber);
+                long taskCount = await _taskRepository.GetTaskCount(userId, taskNumber);
+                
                 ICollection<TaskDto> taskDtos = _taskMapper.MapBack(tasks);
-                result = Ok(taskDtos);
+                result = Ok(
+                    new {
+                    tasks = taskDtos,
+                    taskCount
+                });
             }
             catch (Exception e)
             {
@@ -68,26 +73,6 @@ namespace Application.Controllers
                 _taskService.AddNewTask(taskEntity);
                 await _taskRepository.SaveAsync();
                 result = Ok();
-            }
-            catch (Exception e)
-            {
-                result = Problem(e.Message);
-            }
-            
-            return result;
-        }
-
-        [HttpGet("count")]
-        // [Authorize]
-        public async Task<ActionResult<long>> GetTaskCount()
-        {
-            ActionResult<long> result;
-            try
-            {
-                long userId = GetUserIdFromClaims();
-                Assert.IsNotNull(userId);
-                long taskCount = await _taskRepository.GetTaskCount(userId);
-                result = Ok(taskCount);
             }
             catch (Exception e)
             {
