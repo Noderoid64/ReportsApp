@@ -1,0 +1,9 @@
+﻿using System.Threading.Tasks;
+
+namespace Application.Services.Facades
+{
+    public interface IAuthFacade
+    {
+        Task<string> GetTokenAsync(string email, string password);
+    }
+}

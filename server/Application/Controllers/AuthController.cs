@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Threading.Tasks;
-using Application.Services.JwtToken;
-using DAL.Repositories;
-using Domain.Entities;
+using Application.Models;
+using Application.Services.Facades;
 using Microsoft.AspNetCore.Mvc;
-using Tools;
 
 namespace Application.Controllers
 {
@@ -12,27 +10,17 @@ namespace Application.Controllers
     [Route("api/[controller]")]
     public class AuthController : Controller
     {
-        private readonly IJwtTokenGenerator _tokenGenerator;
-        private readonly IUserRepository _userRepository;
+        private readonly IAuthFacade _authFacade;
 
-        public AuthController(
-            IJwtTokenGenerator tokenGenerator,
-            IUserRepository userRepository
-        )
+        public AuthController(IAuthFacade authFacade)
         {
-            _tokenGenerator = tokenGenerator ?? throw new ArgumentNullException(nameof(tokenGenerator));
-            _userRepository = userRepository ?? throw new ArgumentNullException(nameof(userRepository));
+            _authFacade = authFacade ?? throw new ArgumentNullException(nameof(authFacade));
         }
 
         [HttpGet]
         public async Task<ActionResult<string>> GetToken(string email, string password)
         {
-            UserEntity user = await _userRepository.GetUserByEmailAsync(email);
-            
-            Validators.IsNotNull(user, $"User with email: {email} does not exist");
-            Validators.IsFalse((!password.Equals(user.Password)), $"Incorrect password");
-            
-            return Json(_tokenGenerator.GenerateToken(email, user.Id));
+            return Json(await _authFacade.GetTokenAsync(email, password));
         }
     }
 }
