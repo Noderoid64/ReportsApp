@@ -27,15 +27,12 @@ namespace Application.Controllers
         [HttpGet]
         public async Task<ActionResult<string>> GetToken(string email, string password)
         {
-            ActionResult result;
-
             UserEntity user = await _userRepository.GetUserByEmailAsync(email);
-            Assert.IsNotNull(user, $"User with email: {email} does not exist");
-            Assert.IsFalse((!password.Equals(user.Password)), $"Incorrect password");
-            result = Json(_tokenGenerator.GenerateToken(email, user.Id));
-
-
-            return result;
+            
+            Validators.IsNotNull(user, $"User with email: {email} does not exist");
+            Validators.IsFalse((!password.Equals(user.Password)), $"Incorrect password");
+            
+            return Json(_tokenGenerator.GenerateToken(email, user.Id));
         }
     }
 }

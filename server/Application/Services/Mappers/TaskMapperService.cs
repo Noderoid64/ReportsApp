@@ -10,10 +10,10 @@ namespace Application.Services.Mappers
     {
         public TaskEntity Map(TaskDto fromType)
         {
-            Assert.IsNotNull(fromType);
+            Validators.IsNotNull(fromType);
             
             TaskEntity result = new TaskEntity();
-            Assert.IsFalse(
+            Validators.IsFalse(
                 TaskStatus.TryParse(fromType.status, out TaskStatus status), 
                 "Can't parse task status"
                 ); 
@@ -29,7 +29,7 @@ namespace Application.Services.Mappers
         
         public TaskDto MapBack(TaskEntity fromType)
         {
-            Assert.IsNotNull(fromType);
+            Validators.IsNotNull(fromType);
 
             TaskDto result = new TaskDto();
             result.id = fromType.Id;
@@ -45,7 +45,7 @@ namespace Application.Services.Mappers
 
         public ICollection<TaskEntity> Map(ICollection<TaskDto> fromCollection)
         {
-            Assert.IsNotNull(fromCollection);
+            Validators.IsNotNull(fromCollection);
             IList<TaskEntity> result = new List<TaskEntity>();
             foreach (var from in fromCollection)
             {
@@ -57,7 +57,7 @@ namespace Application.Services.Mappers
         
         public ICollection<TaskDto> MapBack(ICollection<TaskEntity> fromCollection)
         {
-            Assert.IsNotNull(fromCollection);
+            Validators.IsNotNull(fromCollection);
             IList<TaskDto> result = new List<TaskDto>();
             foreach (var from in fromCollection)
             {

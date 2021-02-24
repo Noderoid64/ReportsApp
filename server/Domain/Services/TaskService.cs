@@ -22,7 +22,7 @@ namespace Domain.Services
 
         public void AddNewTask(TaskEntity task)
         {
-            Assert.IsNotNull(task, "Task should not be null");
+            Validators.IsNotNull(task, "Task should not be null");
 
             if (string.IsNullOrEmpty(task.TaskNumber))
             {

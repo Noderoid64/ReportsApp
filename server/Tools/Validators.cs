@@ -2,7 +2,7 @@
 
 namespace Tools
 {
-    public static class Assert
+    public static class Validators
     {
         public static void IsNotNull(Object obj)
         {

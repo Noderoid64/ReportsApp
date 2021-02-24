@@ -74,7 +74,7 @@ namespace Application.Controllers
             IActionResult result;
 
             taskDto.userId = GetUserIdFromClaims();
-            Assert.IsNotNull(taskDto.userId);
+            Validators.IsNotNull(taskDto.userId);
             TaskEntity taskEntity = _taskMapper.Map(taskDto);
             _taskService.AddNewTask(taskEntity);
             await _taskRepository.SaveAsync();
@@ -87,7 +87,7 @@ namespace Application.Controllers
         private long GetUserIdFromClaims()
         {
             string strId = User.Claims.FirstOrDefault(c => c.Type.Equals("id"))?.Value;
-            Assert.IsNotNull(strId);
+            Validators.IsNotNull(strId);
             return long.Parse(strId);
         }
     }
