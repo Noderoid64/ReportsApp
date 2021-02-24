@@ -12,8 +12,8 @@ namespace Application.Controllers
     [Route("api/[controller]")]
     public class AuthController : Controller
     {
-        private IJwtTokenGenerator _tokenGenerator;
-        private IUserRepository _userRepository;
+        private readonly IJwtTokenGenerator _tokenGenerator;
+        private readonly IUserRepository _userRepository;
 
         public AuthController(
             IJwtTokenGenerator tokenGenerator,

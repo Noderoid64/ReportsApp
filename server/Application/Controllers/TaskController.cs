@@ -18,9 +18,9 @@ namespace Application.Controllers
     [Route("api/tasks")]
     public class TaskController : Controller
     {
-        private ITaskRepository _taskRepository;
-        private ITaskService _taskService;
-        private IBiCollectionMapper<TaskDto, TaskEntity> _taskMapper;
+        private readonly ITaskRepository _taskRepository;
+        private readonly ITaskService _taskService;
+        private readonly IBiCollectionMapper<TaskDto, TaskEntity> _taskMapper;
 
         public TaskController(
             ITaskRepository taskRepository,

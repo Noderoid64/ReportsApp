@@ -8,8 +8,8 @@ namespace Domain.Services
 {
     public class TaskService: ITaskService
     {
-        private ITaskProvider _taskProvider;
-        private ITaskNumberGenerator _taskNumberGenerator;
+        private readonly ITaskProvider _taskProvider;
+        private readonly ITaskNumberGenerator _taskNumberGenerator;
 
         public TaskService(
             ITaskProvider taskProvider,

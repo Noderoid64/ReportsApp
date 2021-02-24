@@ -9,15 +9,6 @@ namespace Application.Services.JwtToken
 {
     class JwtTokenGenerator : IJwtTokenGenerator
     {
-        private List<UserCredentials> users = new List<UserCredentials>()
-        {
-            new UserCredentials()
-            {
-                Email = "admin@gmail.com",
-                Password = "admin"
-            }
-        };
-        
         public string GenerateToken(string email, long id)
         {
             var identity = GetIdentity(email, id);
