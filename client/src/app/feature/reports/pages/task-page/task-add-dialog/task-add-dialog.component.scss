@@ -1,7 +1,8 @@
 @use 'variables/intervals' as intervals;
 
 .task-add-dialog {
-    min-width: 15rem;
+    min-width: 10rem;
+    max-width: 24rem;
     .task-add-dialog-content {
         margin-top: intervals.$padding-med;
         .task-info-input {

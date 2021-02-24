@@ -2,6 +2,20 @@
     <span class="mat-title">New Task</span>
     <mat-dialog-content class="task-add-dialog-content">
         <form [formGroup]="newTaskForm">
+            <!-- TODO: move controls to separate component-->
+            <mat-form-field class="task-info-input">
+                <mat-label>Task number</mat-label>
+                <input matInput formControlName="taskNumber" placeholder="20210102-0002">
+                <mat-error *ngIf="newTaskForm.controls['taskNumber'].hasError('required')">
+                    Required field
+                </mat-error>
+                <mat-error *ngIf="newTaskForm.controls['taskNumber'].hasError('invalidFormat')">
+                    Invalid task format
+                </mat-error>
+                <mat-error *ngIf="newTaskForm.controls['taskNumber'].hasError('alreadyExist')">
+                    Task already exist
+                </mat-error>
+            </mat-form-field>
             <mat-form-field class="task-info-input">
                 <mat-label>Status</mat-label>
                 <mat-select formControlName="status">

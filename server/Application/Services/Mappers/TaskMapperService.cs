@@ -22,6 +22,7 @@ namespace Application.Services.Mappers
             result.Comment = fromType.comment;
             result.DateTime = fromType.date;
             result.UserId = fromType.userId;
+            result.TaskNumber = fromType.taskNumber;
 
             return result;
         }

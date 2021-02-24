@@ -31,4 +31,10 @@ export class TasksRestProviderService {
         );
     }
 
+    public isTaskWithTubeNumberExist(taskNumber: string): Observable<boolean> {
+        return this.httpClient.get<boolean>(
+            environment.serverUrl + 'tasks/validate?taskNumber=' + taskNumber
+        );
+    }
+
 }

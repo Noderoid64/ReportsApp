@@ -60,6 +60,24 @@ namespace Application.Controllers
             return result;
         }
 
+        [HttpGet("validate")]
+        // [Authorize]
+        public async Task<ActionResult<bool>> GetIsValidTaskNumber(string taskNumber)
+        {
+            ActionResult<bool> result;
+            try
+            {
+                TaskEntity taskEntity = await _taskRepository.GetTaskByTaskNumberAsync(taskNumber);
+                result = Ok(taskEntity == null);
+            }
+            catch (Exception e)
+            {
+                result = Problem(e.Message);
+            }
+
+            return result;
+        }
+
         [HttpPut("add")]
         // [Authorize]
         public async Task<IActionResult> AddTask(TaskDto taskDto)

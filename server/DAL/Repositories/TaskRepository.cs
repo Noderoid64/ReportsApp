@@ -32,6 +32,11 @@ namespace DAL.Repositories
             return await query.ToListAsync();
         }
 
+        public async Task<TaskEntity> GetTaskByTaskNumberAsync(string taskNumber)
+        {
+            return await _context.Tasks.FirstOrDefaultAsync(t => t.TaskNumber.Equals(taskNumber));
+        }
+
         public async Task<long> GetTaskCount(long userId, string? taskNumber)
         {
             var query = _context.Tasks.Where(t => t.UserId.Equals(userId));

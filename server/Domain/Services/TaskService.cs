@@ -24,7 +24,11 @@ namespace Domain.Services
         {
             Assert.IsNotNull(task, "Task should not be null");
 
-            task.TaskNumber = _taskNumberGenerator.CalculateTaskNumber();
+            if (string.IsNullOrEmpty(task.TaskNumber))
+            {
+                task.TaskNumber = _taskNumberGenerator.CalculateTaskNumber();
+            }
+            
             _taskProvider.AddTask(task);
         }
 

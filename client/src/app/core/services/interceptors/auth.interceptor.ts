@@ -19,9 +19,6 @@ export class AuthInterceptor implements HttpInterceptor {
             });
         }
 
-        console.log(this.jwtTokenStorage.getToken());
-        console.log('Opn');
-
         return next.handle(req);
     }
 }

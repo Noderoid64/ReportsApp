@@ -48,7 +48,6 @@ export class TaskPageComponent implements OnInit {
   }
 
   public onPageChanged(page: number): void {
-    console.log(page);
     this.currentPage = page;
     this.updateTasks();
   }
