@@ -1,7 +1,7 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
 
-namespace Application.Dtos
+namespace Application.Models.Dtos
 {
     public class TaskDto
     {

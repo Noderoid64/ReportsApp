@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Application.Dtos;
+using Application.Models.Dtos;
 using Application.Services.Mappers;
 using DAL.Repositories;
 using Domain.Entities;
@@ -16,46 +16,41 @@ namespace Application.Controllers
 {
     [ApiController]
     [Route("api/tasks")]
-    public class TaskController: Controller
+    public class TaskController : Controller
     {
         private ITaskRepository _taskRepository;
         private ITaskService _taskService;
         private IBiCollectionMapper<TaskDto, TaskEntity> _taskMapper;
 
         public TaskController(
-            ITaskRepository taskRepository, 
-            ITaskService taskService, 
+            ITaskRepository taskRepository,
+            ITaskService taskService,
             IBiCollectionMapper<TaskDto, TaskEntity> taskMapper
-            )
+        )
         {
-            _taskRepository = taskRepository;
-            _taskService = taskService;
-            _taskMapper = taskMapper;
+            _taskRepository = taskRepository ?? throw new ArgumentNullException(nameof(taskRepository));
+            _taskService = taskService ?? throw new ArgumentNullException(nameof(taskService));
+            _taskMapper = taskMapper ?? throw new ArgumentNullException(nameof(taskMapper));
         }
-        
+
         [HttpGet]
         // [Authorize]
         public async Task<ActionResult<ICollection<TaskEntity>>> GetTasksAsync(int skip, int take, string? taskNumber)
         {
             ActionResult<ICollection<TaskEntity>> result;
-            try
-            {
-                long userId = GetUserIdFromClaims();
-                
-                ICollection<TaskEntity> tasks = await _taskRepository.GetTasksAsync(skip, take, userId, taskNumber);
-                long taskCount = await _taskRepository.GetTaskCount(userId, taskNumber);
-                
-                ICollection<TaskDto> taskDtos = _taskMapper.MapBack(tasks);
-                result = Ok(
-                    new {
+
+            long userId = GetUserIdFromClaims();
+
+            ICollection<TaskEntity> tasks = await _taskRepository.GetTasksAsync(skip, take, userId, taskNumber);
+            long taskCount = await _taskRepository.GetTaskCount(userId, taskNumber);
+
+            ICollection<TaskDto> taskDtos = _taskMapper.MapBack(tasks);
+            result = Ok(
+                new
+                {
                     tasks = taskDtos,
                     taskCount
                 });
-            }
-            catch (Exception e)
-            {
-                result = Problem(e.Message);
-            }
 
             return result;
         }
@@ -65,15 +60,9 @@ namespace Application.Controllers
         public async Task<ActionResult<bool>> GetIsValidTaskNumber(string taskNumber)
         {
             ActionResult<bool> result;
-            try
-            {
-                TaskEntity taskEntity = await _taskRepository.GetTaskByTaskNumberAsync(taskNumber);
-                result = Ok(taskEntity == null);
-            }
-            catch (Exception e)
-            {
-                result = Problem(e.Message);
-            }
+
+            TaskEntity taskEntity = await _taskRepository.GetTaskByTaskNumberAsync(taskNumber);
+            result = Ok(taskEntity == null);
 
             return result;
         }
@@ -83,20 +72,15 @@ namespace Application.Controllers
         public async Task<IActionResult> AddTask(TaskDto taskDto)
         {
             IActionResult result;
-            try
-            {
-                taskDto.userId = GetUserIdFromClaims();
-                Assert.IsNotNull(taskDto.userId);
-                TaskEntity taskEntity = _taskMapper.Map(taskDto);
-                _taskService.AddNewTask(taskEntity);
-                await _taskRepository.SaveAsync();
-                result = Ok();
-            }
-            catch (Exception e)
-            {
-                result = Problem(e.Message);
-            }
-            
+
+            taskDto.userId = GetUserIdFromClaims();
+            Assert.IsNotNull(taskDto.userId);
+            TaskEntity taskEntity = _taskMapper.Map(taskDto);
+            _taskService.AddNewTask(taskEntity);
+            await _taskRepository.SaveAsync();
+            result = Ok();
+
+
             return result;
         }
 

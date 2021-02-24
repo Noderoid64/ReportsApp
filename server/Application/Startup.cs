@@ -60,6 +60,7 @@ namespace Application
                 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "Application v1"));
             }
 
+            app.UseExceptionMiddleware();
             app.UseHttpsRedirection();
 
             app.UseRouting();
