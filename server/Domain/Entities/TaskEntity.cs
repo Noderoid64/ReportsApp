@@ -10,5 +10,8 @@ namespace Domain.Entities
         public DateTime DateTime { get; set; }
         public TaskStatus Status { get; set; }
         public string Comment { get; set; }
+        
+        public UserEntity User { get; set; }
+        public long UserId { get; set; }
     }
 }

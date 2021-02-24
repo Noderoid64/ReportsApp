@@ -16,6 +16,7 @@ namespace Application.Extensions
                     )
                 );
             services.AddScoped<ITaskRepository, TaskRepository>();
+            services.AddScoped<IUserRepository, UserRepository>();
         }
     }
 }

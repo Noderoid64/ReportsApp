@@ -1,13 +1,16 @@
 ﻿#nullable enable
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Application.Dtos;
 using Application.Services.Mappers;
 using DAL.Repositories;
 using Domain.Entities;
 using Domain.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Tools;
 
 namespace Application.Controllers
 {
@@ -31,14 +34,16 @@ namespace Application.Controllers
         }
         
         [HttpGet]
+        // [Authorize]
         public async Task<ActionResult<ICollection<TaskEntity>>> GetTasksAsync(int skip, int take, string? taskNumber)
         {
             ActionResult<ICollection<TaskEntity>> result;
             try
             {
+                long userId = GetUserIdFromClaims();
                 ICollection<TaskEntity> tasks = !string.IsNullOrEmpty(taskNumber)
-                    ? await _taskRepository.GetTasksByFilterAsync(skip, take, taskNumber)
-                    : await _taskRepository.GetTasksAsync(skip, take);
+                    ? await _taskRepository.GetTasksByFilterAsync(skip, take, taskNumber, userId)
+                    : await _taskRepository.GetTasksAsync(skip, take, userId);
                 ICollection<TaskDto> taskDtos = _taskMapper.MapBack(tasks);
                 result = Ok(taskDtos);
             }
@@ -51,11 +56,14 @@ namespace Application.Controllers
         }
 
         [HttpPut("add")]
+        // [Authorize]
         public async Task<IActionResult> AddTask(TaskDto taskDto)
         {
             IActionResult result;
             try
             {
+                taskDto.userId = GetUserIdFromClaims();
+                Assert.IsNotNull(taskDto.userId);
                 TaskEntity taskEntity = _taskMapper.Map(taskDto);
                 _taskService.AddNewTask(taskEntity);
                 await _taskRepository.SaveAsync();
@@ -70,12 +78,15 @@ namespace Application.Controllers
         }
 
         [HttpGet("count")]
+        // [Authorize]
         public async Task<ActionResult<long>> GetTaskCount()
         {
             ActionResult<long> result;
             try
             {
-                long taskCount = await _taskRepository.GetTaskCount();
+                long userId = GetUserIdFromClaims();
+                Assert.IsNotNull(userId);
+                long taskCount = await _taskRepository.GetTaskCount(userId);
                 result = Ok(taskCount);
             }
             catch (Exception e)
@@ -84,6 +95,13 @@ namespace Application.Controllers
             }
             
             return result;
+        }
+
+        private long GetUserIdFromClaims()
+        {
+            string strId = User.Claims.FirstOrDefault(c => c.Type.Equals("id"))?.Value;
+            Assert.IsNotNull(strId);
+            return long.Parse(strId);
         }
     }
 }

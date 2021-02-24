@@ -6,7 +6,9 @@ import { environment } from 'src/environments/environment';
 
 @Injectable({ providedIn: 'root' })
 export class TasksRestProviderService {
-    constructor(private httpClient: HttpClient) { }
+    constructor(
+        private httpClient: HttpClient
+    ) { }
 
     // TODO merge 'getTasks' and 'getTaskCount' into sigle request
 
@@ -15,7 +17,10 @@ export class TasksRestProviderService {
             environment.serverUrl +
             'tasks?take=' + take +
             '&skip=' + skip + (taskNumber ?
-                '&taskNumber=' + taskNumber : '')
+                '&taskNumber=' + taskNumber : ''),
+            {
+
+            }
         );
     }
 

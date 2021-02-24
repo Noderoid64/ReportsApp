@@ -11,5 +11,6 @@ namespace Application.Dtos
         [Required]
         public string status { get; set; }
         public string comment { get; set; }
+        public long userId { get; set; }
     }
 }

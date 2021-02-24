@@ -18,9 +18,9 @@ namespace Application.Services.JwtToken
             }
         };
         
-        public string GenerateToken(string email, string password)
+        public string GenerateToken(string email, long id)
         {
-            var identity = GetIdentity(email, password);
+            var identity = GetIdentity(email, id);
             if (identity == null)
             {
                 throw new Exception("Invalid username or password");
@@ -42,16 +42,15 @@ namespace Application.Services.JwtToken
             return encodedJwt;
         }
  
-        private ClaimsIdentity GetIdentity(string email, string password)
+        private ClaimsIdentity GetIdentity(string email, long id)
         {
             ClaimsIdentity claimsIdentity = null;
             
-            UserCredentials person = users.FirstOrDefault(x => x.Email == email && x.Password == password);
-            if (person != null)
-            {
                 var claims = new List<Claim>
                 {
-                    new Claim(ClaimsIdentity.DefaultNameClaimType, person.Email)
+                    new Claim(ClaimsIdentity.DefaultNameClaimType, email),
+                    new Claim(ClaimsIdentity.DefaultRoleClaimType, "User"),
+                    new Claim("id", id.ToString())
                 };
                 claimsIdentity = new ClaimsIdentity(
                         claims, 
@@ -59,7 +58,7 @@ namespace Application.Services.JwtToken
                         ClaimsIdentity.DefaultNameClaimType,
                         ClaimsIdentity.DefaultRoleClaimType
                         );
-            }
+            
  
             return claimsIdentity;
         }

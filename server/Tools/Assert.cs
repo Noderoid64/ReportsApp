@@ -27,7 +27,7 @@ namespace Tools
             }
         }
 
-        public static void IsTrue(bool condition, string message)
+        public static void IsFalse(bool condition, string message)
         {
             if (condition)
             {
@@ -35,7 +35,7 @@ namespace Tools
             }
         }
         
-        public static void IsTrue(bool condition, Exception exception)
+        public static void IsFalse(bool condition, Exception exception)
         {
             if (condition)
             {

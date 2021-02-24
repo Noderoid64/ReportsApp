@@ -5,8 +5,8 @@ import { LoginComponent } from './pages/login-page/login-page.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { RootComponent } from './components/root/root.component';
 import { SharedModule } from '../shared/shared.module';
-import { ReactiveFormsModule } from '@angular/forms';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
+import { AuthInterceptor } from './services/interceptors/auth.interceptor';
 
 @NgModule({
   declarations: [
@@ -20,7 +20,13 @@ import { HttpClientModule } from '@angular/common/http';
     BrowserAnimationsModule,
     SharedModule
   ],
-  providers: [],
+  providers: [
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: AuthInterceptor,
+      multi: true
+    }
+  ],
   bootstrap: [
     RootComponent
   ]

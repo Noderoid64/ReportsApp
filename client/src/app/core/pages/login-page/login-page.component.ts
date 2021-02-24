@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
 import { JwtStorageService } from '../../services/jwt-storage.service';
 import { JwtTokenRestProvider } from '../../services/jwt-token-rest-provider.service';
 
@@ -22,7 +23,8 @@ export class LoginComponent {
 
   constructor(
     private jwtTokenProvider: JwtTokenRestProvider,
-    private jwtTokenStorage: JwtStorageService
+    private jwtTokenStorage: JwtStorageService,
+    private router: Router
   ) { }
 
   public loginButtonPressed(): void {
@@ -32,6 +34,7 @@ export class LoginComponent {
       this.jwtTokenProvider.getToken(formValue.emailControl, formValue.passControl)
         .subscribe(res => {
           this.jwtTokenStorage.setToken(res);
+          this.router.navigateByUrl('reports/tasks');
         }, error => console.error(error));
     }
 

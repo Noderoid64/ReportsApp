@@ -13,7 +13,7 @@ namespace Application.Services.Mappers
             Assert.IsNotNull(fromType);
             
             TaskEntity result = new TaskEntity();
-            Assert.IsTrue(
+            Assert.IsFalse(
                 TaskStatus.TryParse(fromType.status, out TaskStatus status), 
                 "Can't parse task status"
                 ); 
@@ -21,6 +21,7 @@ namespace Application.Services.Mappers
             result.Status = status;
             result.Comment = fromType.comment;
             result.DateTime = fromType.date;
+            result.UserId = fromType.userId;
 
             return result;
         }

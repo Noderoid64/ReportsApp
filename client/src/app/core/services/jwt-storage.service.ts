@@ -3,15 +3,15 @@ import { Injectable } from '@angular/core';
 @Injectable({ providedIn: 'root' })
 export class JwtStorageService {
 
-    private token: string;
+    private readonly TOKEN_KEY = 'token';
 
     constructor() { }
 
     public getToken(): string {
-        return this.token;
+        return localStorage.getItem(this.TOKEN_KEY);
     }
 
     public setToken(token: string): void {
-        this.token = token;
+        localStorage.setItem(this.TOKEN_KEY, token);
     }
 }
