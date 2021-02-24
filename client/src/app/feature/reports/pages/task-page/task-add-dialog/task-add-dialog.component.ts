@@ -1,10 +1,11 @@
 import { Component, OnDestroy } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { untilDestroyed } from '@ngneat/until-destroy';
+import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { Task } from '../../../model/task.model';
 import { TasksRestProviderService } from '../../../services/tasks-rest-provider.service';
 import { taskNumberValidator } from '../../../services/validators/task-number.validator';
 
+@UntilDestroy()
 @Component({
   selector: 'app-task-add-dialog',
   templateUrl: './task-add-dialog.component.html',

@@ -2,7 +2,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { untilDestroyed } from '@ngneat/until-destroy';
+import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { Observable, of } from 'rxjs';
 import { debounceTime, map } from 'rxjs/operators';
 import { TaskCountDto } from '../../model/task-count.dto';
@@ -10,6 +10,7 @@ import { Task } from '../../model/task.model';
 import { TasksRestProviderService } from '../../services/tasks-rest-provider.service';
 import { TaskAddDialogComponent } from './task-add-dialog/task-add-dialog.component';
 
+@UntilDestroy()
 @Component({
   selector: 'app-task-page',
   templateUrl: './task-page.component.html',
