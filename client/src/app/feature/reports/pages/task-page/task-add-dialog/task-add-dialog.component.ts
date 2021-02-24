@@ -1,6 +1,6 @@
 import { Component, OnDestroy } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { Subscription } from 'rxjs';
+import { untilDestroyed } from '@ngneat/until-destroy';
 import { Task } from '../../../model/task.model';
 import { TasksRestProviderService } from '../../../services/tasks-rest-provider.service';
 import { taskNumberValidator } from '../../../services/validators/task-number.validator';
@@ -28,16 +28,15 @@ export class TaskAddDialogComponent implements OnDestroy {
   });
   public canAddBePressed = false;
 
-  private subscribtions: Subscription;
-
   constructor(private taskProvider: TasksRestProviderService) {
-    this.subscribtions = this.newTaskForm.valueChanges.subscribe(() => {
-      this.canAddBePressed = this.newTaskForm.valid;
-    });
+    this.newTaskForm.valueChanges
+      .pipe(untilDestroyed(this))
+      .subscribe(() => {
+        this.canAddBePressed = this.newTaskForm.valid;
+      });
   }
 
   public ngOnDestroy() {
-    this.subscribtions.unsubscribe();
   }
 
   public getTask(): Task {

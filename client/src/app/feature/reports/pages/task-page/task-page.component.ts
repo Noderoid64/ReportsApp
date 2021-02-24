@@ -1,8 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { Observable, of, Subscription } from 'rxjs';
+import { untilDestroyed } from '@ngneat/until-destroy';
+import { Observable, of } from 'rxjs';
 import { debounceTime, map } from 'rxjs/operators';
 import { TaskCountDto } from '../../model/task-count.dto';
 import { Task } from '../../model/task.model';
@@ -14,15 +15,13 @@ import { TaskAddDialogComponent } from './task-add-dialog/task-add-dialog.compon
   templateUrl: './task-page.component.html',
   styleUrls: ['./task-page.component.scss']
 })
-export class TaskPageComponent implements OnInit {
+export class TaskPageComponent implements OnInit, OnDestroy {
 
   public readonly pageSize = 10;
   public tasks$: Observable<Task[]> = of();
   public taskCount$: Observable<number> = of(0);
   public currentPage = 0;
   public filterControl = new FormControl();
-
-  private subscriptions: Subscription;
 
   constructor(
     public dialog: MatDialog,
@@ -32,8 +31,15 @@ export class TaskPageComponent implements OnInit {
 
   public ngOnInit(): void {
     this.updateTasks();
-    this.subscriptions = this.filterControl.valueChanges.pipe(debounceTime(500)).subscribe(this.updateTasks.bind(this));
+    this.filterControl.valueChanges
+      .pipe(
+        untilDestroyed(this),
+        debounceTime(500)
+      )
+      .subscribe(this.updateTasks.bind(this));
   }
+
+  public ngOnDestroy(): void { }
 
   public openDialog(): void {
     const dialogRef = this.dialog.open(TaskAddDialogComponent);
