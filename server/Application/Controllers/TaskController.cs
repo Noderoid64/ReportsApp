@@ -1,6 +1,7 @@
 ﻿#nullable enable
 using System;
 using System.Collections.Generic;
+using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Threading.Tasks;
 using Application.Models.Dtos;
@@ -15,6 +16,7 @@ using Tools;
 namespace Application.Controllers
 {
     [ApiController]
+    [Authorize]
     [Route("api/tasks")]
     public class TaskController : Controller
     {
@@ -34,7 +36,6 @@ namespace Application.Controllers
         }
 
         [HttpGet]
-        // [Authorize]
         public async Task<ActionResult<ICollection<TaskEntity>>> GetTasksAsync(int skip, int take, string? taskNumber)
         {
             // TODO find another way to retrieve userId
@@ -54,14 +55,12 @@ namespace Application.Controllers
         }
 
         [HttpGet("validate")]
-        // [Authorize]
         public async Task<ActionResult<bool>> GetIsValidTaskNumber(string taskNumber)
         {
             return Ok(await _taskFacade.GetIsValidTaskNumberAsync(taskNumber));
         }
 
         [HttpPut("add")]
-        // [Authorize]
         public async Task<IActionResult> AddTask(TaskDto taskDto)
         {
             TaskEntity task = _mapper.Map<TaskEntity>(taskDto);
@@ -74,7 +73,7 @@ namespace Application.Controllers
         // TODO find other way to retrieve claims 
         private long GetUserIdFromClaims()
         {
-            string strId = User.Claims.FirstOrDefault(c => c.Type.Equals("id"))?.Value;
+            string strId = User?.Claims?.FirstOrDefault(c => c.Type.Equals("Id"))?.Value;
             Validators.IsNotNull(strId);
             return long.Parse(strId);
         }

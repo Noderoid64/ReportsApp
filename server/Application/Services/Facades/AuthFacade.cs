@@ -10,15 +10,15 @@ namespace Application.Services.Facades
     public class AuthFacade: IAuthFacade
     {
         private readonly IUserRepository _userRepository;
-        private readonly IJwtTokenGenerator _tokenGenerator;
+        private readonly ITokenService _tokenService;
 
         public AuthFacade(
             IUserRepository userRepository,
-            IJwtTokenGenerator tokenGenerator
+            ITokenService tokenService
             )
         {
-            _userRepository = userRepository ?? throw new ArgumentNullException(nameof(_userRepository));
-            _tokenGenerator = tokenGenerator ?? throw new ArgumentNullException(nameof(_tokenGenerator));
+            _userRepository = userRepository ?? throw new ArgumentNullException(nameof(userRepository));
+            _tokenService = tokenService ?? throw new ArgumentNullException(nameof(tokenService));
         }
         
         public async Task<ValueTuple<long, string>> GetAuthDataAsync(string email, string password)
@@ -27,7 +27,7 @@ namespace Application.Services.Facades
             
             Validators.IsNotNull(user, $"Incorrect email or password");
 
-            return (user.Id, _tokenGenerator.GenerateToken(email, user.Id));
+            return (user.Id, _tokenService.CreateToken(user));
         }
     }
 }

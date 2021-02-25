@@ -42,8 +42,7 @@ namespace Application
             services.AddApplicationServices();
             services.ConfigureDAL(Configuration);
             services.ConfigureDomain();
-            services.AddScoped<IJwtTokenGenerator, JwtTokenGenerator>();
-            services.AddJwtAuth();
+            services.AddJwtAuth(Configuration);
             services.AddControllers();
             services.AddSwaggerGen(c =>
             {
@@ -67,8 +66,9 @@ namespace Application
             app.UseRouting();
             app.UseCors();
 
-            app.UseAuthorization();
             app.UseAuthentication();
+            app.UseAuthorization();
+            
 
             app.UseEndpoints(endpoints => { endpoints.MapControllers(); });
         }

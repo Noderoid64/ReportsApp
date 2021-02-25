@@ -4,13 +4,14 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 
 using Application.Services.JwtToken;
+using Microsoft.Extensions.Configuration;
 
 namespace Application.Extensions
 {
     public static class ConfigureAuthExtension
     {
         
-        public static void AddJwtAuth(this IServiceCollection services)
+        public static void AddJwtAuth(this IServiceCollection services, IConfiguration config)
         {
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer(options =>
@@ -22,7 +23,7 @@ namespace Application.Extensions
                         ValidateAudience = false,
                         ValidateLifetime = true,
                         ValidateIssuerSigningKey = true,
-                        IssuerSigningKey = JwtTokenOptions.GetSymmetricSecurityKey()
+                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(config["Token:Key"]))
                         
                     };
                 });

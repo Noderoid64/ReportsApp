@@ -1,8 +1,6 @@
 ﻿using Application.Middleware;
-using Application.Models;
-using Application.Models.Dtos;
 using Application.Services.Facades;
-using Domain.Entities;
+using Application.Services.JwtToken;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -12,6 +10,7 @@ namespace Application.Extensions
     {
         public static void AddApplicationServices(this IServiceCollection services)
         {
+            services.AddScoped<ITokenService, TokenService>();
             services.AddScoped<IAuthFacade, AuthFacade>();
             services.AddScoped<ITaskFacade, TaskFacade>();
         }
