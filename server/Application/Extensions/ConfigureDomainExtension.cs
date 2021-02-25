@@ -1,8 +1,4 @@
-﻿using Application.Services;
-using DAL.Repositories;
-using Domain.Ports;
-using Domain.Services;
-using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.DependencyInjection;
 
 namespace Application.Extensions
 {
@@ -10,9 +6,6 @@ namespace Application.Extensions
     {
         public static void ConfigureDomain(this IServiceCollection services)
         {
-            services.AddScoped<ITaskService, TaskService>();
-            services.AddScoped<ITaskProvider, TaskRepository>();
-            services.AddSingleton<ITaskNumberGenerator, TaskNumberGenerator>();
         }
     }
 }

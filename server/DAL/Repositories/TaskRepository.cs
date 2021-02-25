@@ -3,12 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Domain.Entities;
-using Domain.Ports;
 using Microsoft.EntityFrameworkCore;
 
 namespace DAL.Repositories
 {
-    public class TaskRepository: ITaskRepository, ITaskProvider
+    public class TaskRepository: ITaskRepository
     {
         private readonly ApplicationDbContext _context;
 

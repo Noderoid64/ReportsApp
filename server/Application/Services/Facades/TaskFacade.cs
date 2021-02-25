@@ -1,31 +1,35 @@
 ﻿using System;
 using System.Threading.Tasks;
-using Application.Models;
 using DAL.Repositories;
 using Domain.Entities;
-using Domain.Services;
 using Tools;
 
 namespace Application.Services.Facades
 {
     public class TaskFacade: ITaskFacade
     {
-        private readonly ITaskService _taskService;
+        private readonly ITaskNumberGenerator _taskNumberGenerator;
         private readonly ITaskRepository _taskRepository;
 
         public TaskFacade(
-            ITaskService taskService,
+            ITaskNumberGenerator taskNumberGenerator,
             ITaskRepository taskRepository
         )
         {
-            _taskService = taskService ?? throw new ArgumentNullException(nameof(taskService));
+            _taskNumberGenerator = taskNumberGenerator ?? throw new ArgumentNullException(nameof(taskNumberGenerator));
             _taskRepository = taskRepository ?? throw new ArgumentNullException(nameof(taskRepository));
         }
         
         public async Task AddTaskAsync(TaskEntity task)
         {
-            Validators.IsNotNull(task.UserId);
-            _taskService.AddNewTask(task);
+            Validators.IsNotNull(task);
+            
+            if (string.IsNullOrEmpty(task.TaskNumber))
+            {
+                task.TaskNumber = _taskNumberGenerator.CalculateTaskNumber();
+            }
+            
+            _taskRepository.AddTask(task);
             await _taskRepository.SaveAsync();
         }
 

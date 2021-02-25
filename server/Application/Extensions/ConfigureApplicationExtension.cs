@@ -1,5 +1,6 @@
 ﻿using System.Text;
 using Application.Middleware;
+using Application.Services;
 using Application.Services.Facades;
 using Application.Services.JwtToken;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -14,6 +15,7 @@ namespace Application.Extensions
     {
         public static void AddApplicationServices(this IServiceCollection services)
         {
+            services.AddScoped<ITaskNumberGenerator, TaskNumberGenerator>();
             services.AddScoped<ITokenService, TokenService>();
             services.AddScoped<IAuthFacade, AuthFacade>();
             services.AddScoped<ITaskFacade, TaskFacade>();
