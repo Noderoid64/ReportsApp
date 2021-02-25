@@ -38,6 +38,7 @@ namespace Application
                     builder.AllowAnyHeader();
                 });
             });
+            services.AddAutoMapper(typeof(Startup));
             services.AddApplicationServices();
             services.ConfigureDAL(Configuration);
             services.ConfigureDomain();

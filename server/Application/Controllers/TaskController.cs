@@ -3,10 +3,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Application.Models;
 using Application.Models.Dtos;
 using Application.Services.Facades;
-using Application.Services.Mappers;
+using AutoMapper;
 using DAL.Repositories;
 using Domain.Entities;
 using Microsoft.AspNetCore.Authorization;
@@ -20,18 +19,18 @@ namespace Application.Controllers
     public class TaskController : Controller
     {
         private readonly ITaskRepository _taskRepository;
-        private readonly IBiCollectionMapper<TaskDto, TaskEntity> _taskMapper;
         private readonly ITaskFacade _taskFacade;
+        private readonly IMapper _mapper;
 
         public TaskController(
             ITaskRepository taskRepository,
-            IBiCollectionMapper<TaskDto, TaskEntity> taskMapper,
-            ITaskFacade taskFacade
+            ITaskFacade taskFacade,
+            IMapper mapper
         )
         {
             _taskRepository = taskRepository ?? throw new ArgumentNullException(nameof(taskRepository));
-            _taskMapper = taskMapper ?? throw new ArgumentNullException(nameof(taskMapper));
             _taskFacade = taskFacade ?? throw new ArgumentNullException(nameof(taskFacade));
+            _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
         }
 
         [HttpGet]
@@ -45,7 +44,7 @@ namespace Application.Controllers
             ICollection<TaskEntity> tasks = await _taskRepository.GetTasksAsync(skip, take, userId, taskNumber);
             long taskCount = await _taskRepository.GetTaskCount(userId, taskNumber);
 
-            ICollection<TaskDto> taskDtos = _taskMapper.MapBack(tasks);
+            ICollection<TaskDto> taskDtos = _mapper.Map<ICollection<TaskDto>>(tasks);
             return Ok(
                 new
                 {
@@ -65,7 +64,7 @@ namespace Application.Controllers
         // [Authorize]
         public async Task<IActionResult> AddTask(TaskDto taskDto)
         {
-            TaskEntity task = _taskMapper.Map(taskDto);
+            TaskEntity task = _mapper.Map<TaskEntity>(taskDto);
 
             await _taskFacade.AddTaskAsync(task);
             
