@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Threading.Tasks;
-using Application.Models;
 using Application.Services.Facades;
 using Microsoft.AspNetCore.Mvc;
 

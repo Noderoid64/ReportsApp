@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace DAL.Repositories
 {
-    public class UserRepository: IUserRepository
+    public class UserRepository : IUserRepository
     {
         private readonly ApplicationDbContext _context;
 
@@ -14,10 +14,13 @@ namespace DAL.Repositories
         {
             _context = context ?? throw new ArgumentNullException(nameof(context));
         }
-        
-        public async Task<UserEntity> GetUserByEmailAsync(string email)
+
+        public async Task<UserEntity> GetUserByEmailAndPasswordAsync(string email, string password)
         {
-            return await _context.Users.Where(u => u.Email.Equals(email)).FirstOrDefaultAsync();
+            return await _context.Users.FirstOrDefaultAsync(u =>
+                u.Email.Equals(email) &&
+                u.Password.Equals(password)
+            );
         }
     }
 }

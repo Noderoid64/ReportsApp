@@ -5,6 +5,6 @@ namespace DAL.Repositories
 {
     public interface IUserRepository
     {
-        Task<UserEntity> GetUserByEmailAsync(string email);
+        Task<UserEntity> GetUserByEmailAndPasswordAsync(string email, string password);
     }
 }

@@ -23,7 +23,7 @@ namespace Application.Services.Facades
         
         public async Task<string> GetTokenAsync(string email, string password)
         {
-            UserEntity user = await _userRepository.GetUserByEmailAsync(email);
+            UserEntity user = await _userRepository.GetUserByEmailAndPasswordAsync(email, password);
             
             Validators.IsNotNull(user, $"User with email: {email} does not exist");
             Validators.IsFalse((!password.Equals(user.Password)), $"Incorrect password");
