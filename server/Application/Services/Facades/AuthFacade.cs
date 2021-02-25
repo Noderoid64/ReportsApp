@@ -25,8 +25,7 @@ namespace Application.Services.Facades
         {
             UserEntity user = await _userRepository.GetUserByEmailAndPasswordAsync(email, password);
             
-            Validators.IsNotNull(user, $"User with email: {email} does not exist");
-            Validators.IsFalse((!password.Equals(user.Password)), $"Incorrect password");
+            Validators.IsNotNull(user, $"Incorrect email or password");
 
             return _tokenGenerator.GenerateToken(email, user.Id);
         }
