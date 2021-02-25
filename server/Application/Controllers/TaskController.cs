@@ -1,9 +1,8 @@
 ﻿#nullable enable
 using System;
 using System.Collections.Generic;
-using System.IdentityModel.Tokens.Jwt;
-using System.Linq;
 using System.Threading.Tasks;
+using Application.Extensions;
 using Application.Models.Dtos;
 using Application.Services.Facades;
 using AutoMapper;
@@ -11,7 +10,6 @@ using DAL.Repositories;
 using Domain.Entities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Tools;
 
 namespace Application.Controllers
 {
@@ -38,8 +36,7 @@ namespace Application.Controllers
         [HttpGet]
         public async Task<ActionResult<ICollection<TaskEntity>>> GetTasksAsync(int skip, int take, string? taskNumber)
         {
-            // TODO find another way to retrieve userId
-            long userId = GetUserIdFromClaims();
+            long userId = User.RetrieveUserId();
 
             // TODO move to facade
             ICollection<TaskEntity> tasks = await _taskRepository.GetTasksAsync(skip, take, userId, taskNumber);
@@ -68,14 +65,6 @@ namespace Application.Controllers
             await _taskFacade.AddTaskAsync(task);
             
             return Ok();
-        }
-
-        // TODO find other way to retrieve claims 
-        private long GetUserIdFromClaims()
-        {
-            string strId = User?.Claims?.FirstOrDefault(c => c.Type.Equals("Id"))?.Value;
-            Validators.IsNotNull(strId);
-            return long.Parse(strId);
         }
     }
 }
