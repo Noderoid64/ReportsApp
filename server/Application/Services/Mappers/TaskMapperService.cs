@@ -14,15 +14,15 @@ namespace Application.Services.Mappers
             
             TaskEntity result = new TaskEntity();
             Validators.IsFalse(
-                TaskStatus.TryParse(fromType.status, out TaskStatus status), 
+                TaskStatus.TryParse(fromType.Status, out TaskStatus status), 
                 "Can't parse task status"
                 ); 
             
             result.Status = status;
-            result.Comment = fromType.comment;
-            result.DateTime = fromType.date;
-            result.UserId = fromType.userId;
-            result.TaskNumber = fromType.taskNumber;
+            result.Comment = fromType.Comment;
+            result.DateTime = fromType.Date;
+            result.UserId = fromType.UserId;
+            result.TaskNumber = fromType.TaskNumber;
 
             return result;
         }
@@ -32,11 +32,11 @@ namespace Application.Services.Mappers
             Validators.IsNotNull(fromType);
 
             TaskDto result = new TaskDto();
-            result.id = fromType.Id;
-            result.taskNumber = fromType.TaskNumber;
-            result.comment = fromType.Comment;
-            result.date = fromType.DateTime;
-            result.status = fromType.Status.ToString();
+            result.Id = fromType.Id;
+            result.TaskNumber = fromType.TaskNumber;
+            result.Comment = fromType.Comment;
+            result.Date = fromType.DateTime;
+            result.Status = fromType.Status.ToString();
 
             return result;
         }

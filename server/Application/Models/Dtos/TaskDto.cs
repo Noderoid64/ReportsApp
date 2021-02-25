@@ -5,19 +5,19 @@ namespace Application.Models.Dtos
 {
     public class TaskDto
     {
-        public long id { get; set; }
+        public long Id { get; set; }
         
         [Required]
-        public string taskNumber { get; set; }
+        public string TaskNumber { get; set; }
         
         [Required]
-        public string status { get; set; }
+        public string Status { get; set; }
         
         [Required]
-        public long userId { get; set; }
+        public long UserId { get; set; }
         
-        public DateTime date { get; set; }
-        public string comment { get; set; }
+        public DateTime Date { get; set; }
+        public string Comment { get; set; }
         
     }
 }
