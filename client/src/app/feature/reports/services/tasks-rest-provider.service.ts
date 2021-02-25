@@ -4,15 +4,13 @@ import { Observable } from 'rxjs';
 import { Task } from '../model/task.model';
 import { environment } from 'src/environments/environment';
 import { share } from 'rxjs/operators';
-import { TaskCountDto } from '../model/task-count.dto';
+import { TaskCountDto } from '../model/dtos/task-count.dto';
 
 @Injectable({ providedIn: 'root' })
 export class TasksRestProviderService {
     constructor(
         private httpClient: HttpClient
     ) { }
-
-    // TODO merge 'getTasks' and 'getTaskCount' into sigle request
 
     public getTasks(take: number, skip: number, taskNumber: string | undefined): Observable<TaskCountDto> {
         return this.httpClient.get<TaskCountDto>(

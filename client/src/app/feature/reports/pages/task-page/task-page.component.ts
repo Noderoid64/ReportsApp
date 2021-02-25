@@ -5,7 +5,8 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { Observable, of } from 'rxjs';
 import { debounceTime, map } from 'rxjs/operators';
-import { TaskCountDto } from '../../model/task-count.dto';
+import { UserDataStorageService } from 'src/app/core/services/user-data-storage.service';
+import { TaskCountDto } from '../../model/dtos/task-count.dto';
 import { Task } from '../../model/task.model';
 import { TasksRestProviderService } from '../../services/tasks-rest-provider.service';
 import { TaskAddDialogComponent } from './task-add-dialog/task-add-dialog.component';
@@ -26,8 +27,8 @@ export class TaskPageComponent implements OnInit, OnDestroy {
 
   constructor(
     public dialog: MatDialog,
-    public snackBar: MatSnackBar,
-    private taskProvider: TasksRestProviderService
+    private taskProvider: TasksRestProviderService,
+    private userDataStorage: UserDataStorageService
   ) { }
 
   public ngOnInit(): void {
@@ -45,7 +46,8 @@ export class TaskPageComponent implements OnInit, OnDestroy {
   public openDialog(): void {
     const dialogRef = this.dialog.open(TaskAddDialogComponent);
 
-    dialogRef.afterClosed().toPromise().then(taskToCreate => {
+    dialogRef.afterClosed().toPromise().then((taskToCreate: Task) => {
+      taskToCreate.userId = this.userDataStorage.getUserId();
       this.taskProvider.addTask(taskToCreate).subscribe(() => {
         this.updateTasks();
       }, error => {

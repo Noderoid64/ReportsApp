@@ -19,7 +19,12 @@ namespace Application.Controllers
         [HttpGet]
         public async Task<ActionResult<string>> GetToken(string email, string password)
         {
-            return Json(await _authFacade.GetTokenAsync(email, password));
+            var idTokenTuple = await _authFacade.GetAuthDataAsync(email, password);
+            return Json(new
+            {
+                UserId = idTokenTuple.Item1,
+                Token = idTokenTuple.Item2
+            });
         }
     }
 }

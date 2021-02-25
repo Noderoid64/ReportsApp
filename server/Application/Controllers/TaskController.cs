@@ -41,6 +41,7 @@ namespace Application.Controllers
             // TODO find another way to retrieve userId
             long userId = GetUserIdFromClaims();
 
+            // TODO move to facade
             ICollection<TaskEntity> tasks = await _taskRepository.GetTasksAsync(skip, take, userId, taskNumber);
             long taskCount = await _taskRepository.GetTaskCount(userId, taskNumber);
 
@@ -64,8 +65,6 @@ namespace Application.Controllers
         // [Authorize]
         public async Task<IActionResult> AddTask(TaskDto taskDto)
         {
-            // TODO send userId in taskDto from client
-            taskDto.userId = GetUserIdFromClaims();
             TaskEntity task = _taskMapper.Map(taskDto);
 
             await _taskFacade.AddTaskAsync(task);

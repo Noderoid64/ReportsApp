@@ -3,6 +3,7 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { JwtStorageService } from '../../services/jwt-storage.service';
 import { JwtTokenRestProvider } from '../../services/jwt-token-rest-provider.service';
+import { UserDataStorageService } from '../../services/user-data-storage.service';
 
 @Component({
   selector: 'app-login-page',
@@ -24,6 +25,7 @@ export class LoginComponent {
   constructor(
     private jwtTokenProvider: JwtTokenRestProvider,
     private jwtTokenStorage: JwtStorageService,
+    private userDataStorage: UserDataStorageService,
     private router: Router
   ) { }
 
@@ -33,7 +35,8 @@ export class LoginComponent {
       const formValue = this.loginFormGroup.value;
       this.jwtTokenProvider.getToken(formValue.emailControl, formValue.passControl)
         .subscribe(res => {
-          this.jwtTokenStorage.setToken(res);
+          this.jwtTokenStorage.setToken(res.token);
+          this.userDataStorage.setUserId(res.userId);
           this.router.navigateByUrl('reports/tasks');
         }, error => console.error(error));
     }

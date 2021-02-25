@@ -21,13 +21,13 @@ namespace Application.Services.Facades
             _tokenGenerator = tokenGenerator ?? throw new ArgumentNullException(nameof(_tokenGenerator));
         }
         
-        public async Task<string> GetTokenAsync(string email, string password)
+        public async Task<ValueTuple<long, string>> GetAuthDataAsync(string email, string password)
         {
             UserEntity user = await _userRepository.GetUserByEmailAndPasswordAsync(email, password);
             
             Validators.IsNotNull(user, $"Incorrect email or password");
 
-            return _tokenGenerator.GenerateToken(email, user.Id);
+            return (user.Id, _tokenGenerator.GenerateToken(email, user.Id));
         }
     }
 }

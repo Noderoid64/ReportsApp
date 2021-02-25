@@ -3,5 +3,6 @@ export interface Task {
     taskNumber?: string,
     date: Date,
     status: string,
-    comment?: string
+    comment?: string,
+    userId: number
 }
